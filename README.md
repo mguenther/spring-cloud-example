@@ -1,4 +1,4 @@
-# Spring Cloud Workshop
+# Spring Cloud Demo
 
 This repository sets up a Cloud-based system that uses Spring Cloud components to implement the following patterns:
 
