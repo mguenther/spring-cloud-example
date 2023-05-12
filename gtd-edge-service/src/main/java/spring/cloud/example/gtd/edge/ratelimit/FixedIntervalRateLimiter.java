@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class FixedIntervalRateLimiter implements RateLimiter<FixedIntervalRateLimiter.Config> {
 
-    private static final Duration DEFAULT_DURATION = Duration.of(1, ChronoUnit.SECONDS);
+    private static final Duration DEFAULT_DURATION = Duration.of(10, ChronoUnit.SECONDS);
 
     private static final int DEFAULT_LIMIT = 5;
 
