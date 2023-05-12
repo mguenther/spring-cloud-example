@@ -20,7 +20,7 @@ spring:
     bootstrap-servers: localhost:9092
     consumer:
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: net.mguenther.gtd.event.ItemEventDeserializer
+      value-deserializer: spring.cloud.example.gtd.event.ItemEventDeserializer
       auto-offset-reset: earliest
       enable-auto-commit: false
       isolation-level: read_committed
@@ -63,5 +63,5 @@ api:
 springdoc:
   swagger-ui.path: /openapi/swagger-ui.html
   api-docs.path: /openapi/v3/api-docs
-  packagesToScan: net.mguenther.gtd.api
+  packagesToScan: spring.cloud.example.gtd.api
   pathsToMatch: /**

@@ -56,5 +56,5 @@ api:
 springdoc:
   swagger-ui.path: /openapi/swagger-ui.html
   api-docs.path: /openapi/v3/api-docs
-  packagesToScan: net.mguenther.gtd.api
+  packagesToScan: spring.cloud.example.gtd.api
   pathsToMatch: /**
