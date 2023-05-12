@@ -1,0 +1,44 @@
+### Show all registered route definitions
+
+GET http://localhost:8080/actuator/gateway/routes
+Accept: application/json
+
+### Command Service: Create item
+
+POST http://localhost:8080/command-service/api/items
+Accept: application/json
+Content-Type: application/json
+
+{
+  "description": "Buy groceries"
+}
+
+### Query Service: Show all items
+
+GET http://localhost:8080/query-service/api/items
+Accept: application/json
+
+### Query Service: Show item by ID
+
+GET http://localhost:8080/query-service/api/items/{replace-me}
+Accept: application/json
+
+### Service Discovery: Show currently registered applications
+
+GET http://localhost:8080/eureka/apps
+Accept: application/json
+
+### Service Discovery: Show all instances for query service
+
+GET http://localhost:8080/eureka/apps/gtd-query-service
+Accept: application/json
+
+### Service Discovery: Show all instances for command service
+
+GET http://localhost:8080/eureka/apps/gtd-command-service
+Accept: application/json
+
+### Config Server: Retrieve application configuration for command service
+
+GET http://localhost:8080/config/gtd-command-service/default
+Accept: application/json

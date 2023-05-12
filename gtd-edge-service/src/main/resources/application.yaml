@@ -1,0 +1,85 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: gtd-edge-service
+  cloud:
+    gateway:
+      routes:
+        - id: command-service
+          uri: lb://gtd-command-service
+          predicates:
+            - Path=/command-service/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: example
+                fallbackuri: forward:/fallback
+            - RewritePath=/command-service/(?<remaining>.*), /$\{remaining}
+        - id: query-service
+          uri: lb://gtd-query-service
+          predicates:
+            - Path=/query-service/**
+          filters:
+            - name: RequestRateLimiter
+              args:
+                rate-limiter: "#{@fixedIntervalRateLimiter}"
+                key-resolver: "#{@ipAddressKeyResolver}"
+            - RewritePath=/query-service/(?<remaining>.*), /$\{remaining}
+        - id: eureka-api
+          uri: http://discovery-service:8761
+          predicates:
+            - Path=/eureka/api/{segment}
+          filters:
+            - SetPath=/eureka/{segment}
+        - id: eureka-web-start
+          uri: http://discovery-service:8761
+          predicates:
+            - Path=/eureka/web
+          filters:
+            - SetPath=/
+        - id: eureka-web-other
+          uri: http://discovery-service:8761
+          predicates:
+            - Path=/eureka/**
+        - id: config-server
+          uri: http://config-server:8888
+          predicates:
+            - Path=/config/**
+          filters:
+            - RewritePath=/config/(?<segment>.*), /$\{segment}
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka
+
+resilience4j.circuitbreaker:
+  instances:
+    example:
+      slidingWindowSize: 4
+      permittedNumberOfCallsInHalfOpenState: 2
+      waitDurationInOpenState: 1000
+      failureRateThreshold: 50
+      slowCallDurationThreshold: 2000
+      slowCallRateThreshold: 100
+      slidingWindowType: COUNT_BASED
+      minimumNumberOfCalls: 10
+
+management:
+  endpoint:
+    gateway:
+      enabled: true
+    health:
+      show-details: "ALWAYS"
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+logging:
+  level:
+    root: INFO
+    org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator: INFO
+    org.springframework.cloud.gateway: TRACE
